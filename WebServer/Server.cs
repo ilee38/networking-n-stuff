@@ -26,8 +26,9 @@ public class Server
       listener.Bind(ipEndPoint);
       listener.Listen(100);
 
-      var handler = await listener.AcceptAsync();
       Console.WriteLine($"Server started. Listening on {ipEndPoint.Address}");
+      var handler = await listener.AcceptAsync();
+
       while (true)
       {
          var buffer = new byte[1024];
