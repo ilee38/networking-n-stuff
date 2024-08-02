@@ -30,7 +30,7 @@ public class Client
          var response = Encoding.UTF8.GetString(buffer, 0, received);
          if (response == "<|ACK|>")
          {
-            Console.WriteLine($"Socket client received acknoledgement: \"{response}\"");
+            Console.WriteLine($"Socket client received acknowledgement: \"{response}\"");
             break;
          }
       }

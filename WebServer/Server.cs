@@ -35,18 +35,19 @@ public class Server
          var received = await handler.ReceiveAsync(buffer, SocketFlags.None);
          var response = Encoding.UTF8.GetString(buffer, 0, received);
 
-         var eom = "<|EOM|>";
-         if (response.IndexOf(eom) > -1) // is end of message
-         {
-            Console.WriteLine($"Socket server received message \"{response.Replace(eom, "")}\"");
+         //var eom = "<|EOM|>";
+         //if (response.IndexOf(eom) > -1) // is end of message
+         //{
+            Console.WriteLine($"Socket server received message:");
+            Console.WriteLine($"{response}");
 
-            var ackMessage = "<|ACK|>";
+            var ackMessage = "HTTP/1.1 200 OK\r\n\r\nRequested path: /\r\n";
             var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
             await handler.SendAsync(echoBytes, 0);
             Console.WriteLine($"Socket server sent acknowledgement: \"{ackMessage}\"");
 
             break;
-         }
+         //}
       }
       return 0;
    }
