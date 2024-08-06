@@ -42,7 +42,21 @@ public class Server
          var lineTokens = receivedLines[0].Split(" ");
          var requestedPath = lineTokens[1];
 
-         var ackMessage = $"HTTP/1.1 200 OK\r\n\r\nRequested path: {requestedPath}\r\n";
+         var page = string.Empty;
+         var statusCode = string.Empty;
+         if (string.Equals(requestedPath, "/", StringComparison.InvariantCultureIgnoreCase) ||
+             string.Equals(requestedPath, "/index.html", StringComparison.InvariantCultureIgnoreCase))
+         {
+           var sr = new StreamReader(@"../www/index.html");
+           page = await sr.ReadToEndAsync();
+           statusCode = "200 OK";
+         }
+         else
+         {
+           statusCode = "404 Not Found";
+         }
+
+         var ackMessage = $"HTTP/1.1 {statusCode}\r\n\r\n{page}\r\n";
          var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
          await handler.SendAsync(echoBytes, 0);
          Console.WriteLine($"Socket server sent acknowledgement: {ackMessage}");
