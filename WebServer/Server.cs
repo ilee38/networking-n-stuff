@@ -7,7 +7,7 @@ using System.Text;
 public class Server
 {
 
-   public async Task<int> Start()
+   public static async Task<int> Start()
    {
       // Create an IP endpoint to bind the socket to. In this case,
       // the localhost's IP and port 5001
@@ -27,43 +27,49 @@ public class Server
       listener.Listen(100);
 
       Console.WriteLine($"Server started. Listening on {ipEndPoint.Address}");
-      var handler = await listener.AcceptAsync();
 
       while (true)
       {
          var buffer = new byte[1024];
-         var received = await handler.ReceiveAsync(buffer, SocketFlags.None);
-         var response = Encoding.UTF8.GetString(buffer, 0, received);
-
-         Console.WriteLine($"Socket server received message:");
-         Console.WriteLine($"{response}");
-
-         var receivedLines = response.Split("\n");
-         var lineTokens = receivedLines[0].Split(" ");
-         var requestedPath = lineTokens[1];
-
-         var page = string.Empty;
-         var statusCode = string.Empty;
-         if (string.Equals(requestedPath, "/", StringComparison.InvariantCultureIgnoreCase) ||
-             string.Equals(requestedPath, "/index.html", StringComparison.InvariantCultureIgnoreCase))
+         try
          {
-           var sr = new StreamReader(@"../www/index.html");
-           page = await sr.ReadToEndAsync();
-           statusCode = "200 OK";
+           // Accept connections from clients
+           var handler = await listener.AcceptAsync();
+
+           // Receive data from the connected client
+           var received = await handler.ReceiveAsync(buffer, SocketFlags.None);
+           var response = Encoding.UTF8.GetString(buffer, 0, received);
+
+           var receivedLines = response.Split("\n");
+           var lineTokens = receivedLines[0].Split(" ");
+           var requestedPath = lineTokens[1];
+
+           var page = string.Empty;
+           var statusCode = string.Empty;
+           if (string.Equals(requestedPath, "/", StringComparison.InvariantCultureIgnoreCase) ||
+               string.Equals(requestedPath, "/index.html", StringComparison.InvariantCultureIgnoreCase))
+           {
+             var sr = new StreamReader(@"../www/index.html");
+             page = await sr.ReadToEndAsync();
+             statusCode = "200 OK";
+           }
+           else
+           {
+             statusCode = "404 Not Found";
+           }
+
+           var ackMessage = $"HTTP/1.1 {statusCode}\r\n\r\n{page}\r\n";
+           var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
+           await handler.SendAsync(echoBytes, 0);
+
+           // Close socket for current connection and continue with next connection(s)
+           handler.Close();
          }
-         else
+         catch (Exception e)
          {
-           statusCode = "404 Not Found";
+           Console.WriteLine(e);
+           break;
          }
-
-         var ackMessage = $"HTTP/1.1 {statusCode}\r\n\r\n{page}\r\n";
-         var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
-         await handler.SendAsync(echoBytes, 0);
-         Console.WriteLine($"Socket server sent acknowledgement: {ackMessage}");
-
-         handler.Shutdown(SocketShutdown.Both);
-
-         break;
       }
       return 0;
    }

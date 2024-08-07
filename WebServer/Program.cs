@@ -2,11 +2,11 @@
 
 class Program
 {
-   static async Task<int> Main(string[] args)
+   private static async Task<int> Main(string[] args)
    {
-      var webServer = new Server();
-      int serverExitCode = await webServer.Start();
-      Console.WriteLine("Server stopped.");
+      // Start web server
+      var serverExitCode = await Server.Start();
+      Console.WriteLine($"Server stopped. Exit code: {serverExitCode}");
 
       return serverExitCode;
    }

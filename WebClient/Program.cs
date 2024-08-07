@@ -4,8 +4,7 @@ class Program
 {
    static async Task<int> Main(string[] args)
    {
-      var client = new Client();
-      var clientExitCode = await client.Start();
+      var clientExitCode = await Client.Start();
 
       return clientExitCode;
    }

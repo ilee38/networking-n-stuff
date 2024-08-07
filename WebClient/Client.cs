@@ -6,11 +6,11 @@ namespace WebClient;
 
 public class Client
 {
-   public async Task<int> Start()
+   public static async Task<int> Start()
    {
       // Create an IP endpoint to bind the socket to. In this case,
       // the localhost's IP and port 5001
-      IPAddress localIpAddress = IPAddress.Loopback; // the localhost or "loopback" IP address
+      var localIpAddress = IPAddress.Loopback; // the localhost or "loopback" IP address
       IPEndPoint ipEndPoint = new(localIpAddress, 5001);
 
       using Socket client = new(ipEndPoint.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
