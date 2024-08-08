@@ -4,8 +4,9 @@ using System.Net.Sockets;
 using System.Net;
 using System.Text;
 
-public class Server
+public static class Server
 {
+  private static readonly string WEB_FOLDER_PATH = @"../www";
 
    public static async Task<int> Start()
    {
@@ -46,16 +47,27 @@ public class Server
 
            var page = string.Empty;
            var statusCode = string.Empty;
+
            if (string.Equals(requestedPath, "/", StringComparison.InvariantCultureIgnoreCase) ||
                string.Equals(requestedPath, "/index.html", StringComparison.InvariantCultureIgnoreCase))
            {
-             var sr = new StreamReader(@"../www/index.html");
+             var sr = new StreamReader($"{WEB_FOLDER_PATH}/index.html");
              page = await sr.ReadToEndAsync();
              statusCode = "200 OK";
            }
            else
            {
-             statusCode = "404 Not Found";
+             try
+             {
+               var sr = new StreamReader($"{WEB_FOLDER_PATH}{requestedPath}");
+               page = await sr.ReadToEndAsync();
+               statusCode = "200 OK";
+             }
+             catch (Exception e)
+             {
+               Console.WriteLine(e);
+               statusCode = "404 Not Found";
+             }
            }
 
            var ackMessage = $"HTTP/1.1 {statusCode}\r\n\r\n{page}\r\n";

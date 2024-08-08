@@ -1,4 +1,4 @@
-﻿using WebServer;
+﻿namespace WebServer;
 
 class Program
 {
