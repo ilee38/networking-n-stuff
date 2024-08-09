@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebServer", "WebServer\WebS
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebClient", "WebClient\WebClient.csproj", "{1360D5A8-6463-4671-922D-092549154B7A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoadBalancer", "LoadBalancer\LoadBalancer.csproj", "{2FE64F43-85D1-4DE6-AE30-AB2D477AF4B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{1360D5A8-6463-4671-922D-092549154B7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1360D5A8-6463-4671-922D-092549154B7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1360D5A8-6463-4671-922D-092549154B7A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FE64F43-85D1-4DE6-AE30-AB2D477AF4B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FE64F43-85D1-4DE6-AE30-AB2D477AF4B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FE64F43-85D1-4DE6-AE30-AB2D477AF4B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FE64F43-85D1-4DE6-AE30-AB2D477AF4B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

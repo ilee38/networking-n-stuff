@@ -27,7 +27,7 @@ public static class Server
       listener.Bind(ipEndPoint);
       listener.Listen(100);
 
-      Console.WriteLine($"Server started. Listening on {ipEndPoint.Address}");
+      Console.WriteLine($"Server started. Listening on {ipEndPoint.Address}:{ipEndPoint.Port}");
 
       while (true)
       {
@@ -48,26 +48,21 @@ public static class Server
            var page = string.Empty;
            var statusCode = string.Empty;
 
-           if (string.Equals(requestedPath, "/", StringComparison.InvariantCultureIgnoreCase) ||
-               string.Equals(requestedPath, "/index.html", StringComparison.InvariantCultureIgnoreCase))
+           if (string.Equals(requestedPath, "/", StringComparison.InvariantCultureIgnoreCase))
            {
-             var sr = new StreamReader($"{WEB_FOLDER_PATH}/index.html");
+               requestedPath = "/index.html";
+           }
+
+           try
+           {
+             var sr = new StreamReader($"{WEB_FOLDER_PATH}{requestedPath}");
              page = await sr.ReadToEndAsync();
              statusCode = "200 OK";
            }
-           else
+           catch (Exception e)
            {
-             try
-             {
-               var sr = new StreamReader($"{WEB_FOLDER_PATH}{requestedPath}");
-               page = await sr.ReadToEndAsync();
-               statusCode = "200 OK";
-             }
-             catch (Exception e)
-             {
-               Console.WriteLine(e);
-               statusCode = "404 Not Found";
-             }
+             Console.WriteLine(e);
+             statusCode = "404 Not Found";
            }
 
            var ackMessage = $"HTTP/1.1 {statusCode}\r\n\r\n{page}\r\n";
