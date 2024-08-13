@@ -47,6 +47,8 @@ public static class Server
 
            var page = string.Empty;
            var statusCode = string.Empty;
+           var contentExtension = string.Empty;
+           var contentType = string.Empty;
 
            if (string.Equals(requestedPath, "/", StringComparison.InvariantCultureIgnoreCase))
            {
@@ -57,6 +59,8 @@ public static class Server
            {
              var sr = new StreamReader($"{WEB_FOLDER_PATH}{requestedPath}");
              page = await sr.ReadToEndAsync();
+             contentExtension = requestedPath.Split(".")[1];
+             contentType = HttpConstants.MimeTypes[contentExtension];
              statusCode = "200 OK";
            }
            catch (Exception e)
@@ -65,7 +69,8 @@ public static class Server
              statusCode = "404 Not Found";
            }
 
-           var ackMessage = $"HTTP/1.1 {statusCode}\r\n\r\n{page}\r\n";
+           var ackMessage = $"HTTP/1.1 {statusCode}\r\nContent-Type: {contentType}\r\n\r\n{page}\r\n";
+           Console.WriteLine($"Response message: {ackMessage}");
            var echoBytes = Encoding.UTF8.GetBytes(ackMessage);
            await handler.SendAsync(echoBytes, 0);
 
