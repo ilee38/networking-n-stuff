@@ -15,7 +15,7 @@ public static class Server
       IPAddress localIpAddress = IPAddress.Loopback; // the localhost or "loopback" IP address
       IPEndPoint ipEndPoint = new(localIpAddress, 5001);
 
-      // Create a server and start listening to connections
+      // Create a server and start listening to connections:
       // 1. Create a socket
       using Socket listener = new(
          ipEndPoint.AddressFamily,
@@ -25,6 +25,8 @@ public static class Server
 
       // 2. Bind the socket to the IP endpoint
       listener.Bind(ipEndPoint);
+
+      // 3. Listen to connections
       listener.Listen(100);
 
       Console.WriteLine($"Server started. Listening on {ipEndPoint.Address}:{ipEndPoint.Port}");
