@@ -101,7 +101,7 @@ public class NetFunctionsTests
       string differentSubnetResult = netFunctions.FindRouterForIP(routersFilePath, ipAddress2);
 
       // Assert
-      Assert.Equal("1.2.3.4", sameSubnetResult);
+      Assert.Equal("1.2.3.1", sameSubnetResult);
       Assert.True(string.IsNullOrEmpty(differentSubnetResult));
    }
 }

@@ -101,7 +101,7 @@ public class NetFunctionsTools
    ///  Given a JSON file with router information and an IP address, return the IP address of the router
    ///  that belongs in the same subnet as the given IP address.
    /// </summary>
-   /// <param name="routerInfoFilePath"></param>
+   /// <param name="routerInfoFilePath">Path to JSON file with routers (keyed by router IP)</param>
    /// <param name="iPAddress"></param>
    /// <returns>
    /// The IP address of the corresponding router, or an empty string if no router matches the subnet
@@ -119,9 +119,9 @@ public class NetFunctionsTools
          var routers = root.GetProperty("routers").EnumerateObject();
          while (routers.MoveNext())
          {
-            var currentRouter = routers.Current;
-            var currentRouterIP = currentRouter.Value.GetString();
-            var currentRouterNetMask = root.GetProperty("routers").GetProperty(currentRouterIP).GetString();
+            var currentRouter = routers.Current.Value;
+            var currentRouterIP = routers.Current.Name;
+            var currentRouterNetMask = currentRouter.GetProperty("netmask").GetString();
 
             if (IPsSameSubnet(iPAddress, currentRouterIP, currentRouterNetMask))
             {
