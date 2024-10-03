@@ -1,4 +1,5 @@
 using System;
+using System.Text.Json;
 
 namespace NetFunctions;
 
@@ -61,9 +62,73 @@ public class NetFunctionsTools
    public UInt32 GetSubnetMaskValue(string slash)
    {
       string hostBitsString = slash.Split('/')[1];
-      uint hostBits = uint.Parse(hostBitsString);
-      uint mask = 0xFFFFFFFF << (32 - (int)hostBits);
+      int hostBits = int.Parse(hostBitsString);
+      uint mask = 0xFFFFFFFF << (32 - hostBits);
 
-      return (UInt32)mask;
+      return mask;
+   }
+
+   /// <summary>
+   /// Given two IP addresses and a subnet mask in slash notation, return true
+   /// if the two IP addresses are in the same subnet, and false otherwise.
+   /// </summary>
+   /// <param name="iP1"></param>
+   /// <param name="iP2"></param>
+   /// <param name="slash"></param>
+   /// <returns></returns>
+   public bool IPsSameSubnet(string iP1, string iP2, string slash)
+   {
+      UInt32 subnetMask = GetSubnetMaskValue(slash);
+      UInt32 iP1Value = Ipv4ToValue(iP1);
+      UInt32 iP2Value = Ipv4ToValue(iP2);
+
+      bool sameSubnet = (iP1Value & subnetMask) == (iP2Value & subnetMask);
+      return sameSubnet;
+   }
+
+   /// <summary>
+   ///  Returns the network portion of an IP address value as an integer type.
+   /// </summary>
+   /// <param name="iPValue">IP address as integer value</param>
+   /// <param name="netMask">Mask as integer value</param>
+   /// <returns>The network portion of the address.</returns>
+   public UInt32 GetNetwork(UInt32 iPValue, UInt32 netMask)
+   {
+      return iPValue & netMask;
+   }
+
+   /// <summary>
+   ///  Given a JSON file with router information and an IP address, return the IP address of the router
+   ///  that belongs in the same subnet as the given IP address.
+   /// </summary>
+   /// <param name="routerInfoFilePath"></param>
+   /// <param name="iPAddress"></param>
+   /// <returns>
+   /// The IP address of the corresponding router, or an empty string if no router matches the subnet
+   /// of the given address.
+   /// </returns>
+   public string FindRouterForIP(string routerInfoFilePath, string iPAddress)
+   {
+      string jsonString = File.ReadAllText(routerInfoFilePath);
+
+      // Parse JSON using JsonDocument
+      using (JsonDocument doc = JsonDocument.Parse(jsonString))
+      {
+         JsonElement root = doc.RootElement;
+
+         var routers = root.GetProperty("routers").EnumerateObject();
+         while (routers.MoveNext())
+         {
+            var currentRouter = routers.Current;
+            var currentRouterIP = currentRouter.Value.GetString();
+            var currentRouterNetMask = root.GetProperty("routers").GetProperty(currentRouterIP).GetString();
+
+            if (IPsSameSubnet(iPAddress, currentRouterIP, currentRouterNetMask))
+            {
+               return currentRouterIP;
+            }
+         }
+      }
+      return string.Empty;
    }
 }

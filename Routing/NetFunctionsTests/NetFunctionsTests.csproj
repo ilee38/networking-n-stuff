@@ -24,4 +24,10 @@
     <ProjectReference Include="..\NetFunctions\NetFunctions.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="routers.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
