@@ -9,7 +9,7 @@ public class Dijkstra
    {
    }
 
-   public List<Vertex> DijkstraShortestPath(
+   public static List<Vertex> DijkstraShortestPath(
       Dictionary<Vertex, List<Edge>> routersGraph,
       Vertex sourceIp,
       Vertex destinationIp)
@@ -25,13 +25,18 @@ public class Dijkstra
          if (!shortestPath.Contains(currentVertex))
          {
             shortestPath.Add(currentVertex);
+            if (currentVertex.Name == destinationIp.Name)
+            {
+               return shortestPath;
+            }
          }
 
          foreach (Edge edge in routersGraph[currentVertex])
          {
-            if (Relax(currentVertex, edge.Destination, edge.EdgeWeight))
+            var adjacentVertex = routersGraph.Keys.Where(v => v.Name == edge.Destination.Name).First();
+            if (Relax(currentVertex, adjacentVertex, edge.EdgeWeight))
             {
-               priorityQueue.Enqueue(edge.Destination, edge.Destination.Weight);
+               priorityQueue.Enqueue(adjacentVertex, adjacentVertex.Weight);
             }
          }
       }

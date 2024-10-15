@@ -9,6 +9,18 @@ public class Program
       string routersInfoFilePath = "routerinfo.json";
       var routersGraph = InitializeGraph(routersInfoFilePath);
 
+      // Test some paths from the json file
+      Vertex sourceIp = routersGraph.Keys.Where(v => v.Name == "10.34.52.1").First();
+      Vertex destinationIp = routersGraph.Keys.Where(v => v.Name == "10.34.166.1").First();
+
+      var shortestPaths = Dijkstra.DijkstraShortestPath(routersGraph, sourceIp, destinationIp);
+
+      Console.WriteLine($"Shortest path from {sourceIp.Name} to {destinationIp.Name}:");
+      foreach (Vertex vertex in shortestPaths)
+      {
+         Console.WriteLine(vertex.Name);
+      }
+
    }
 
    private static Dictionary<Vertex, List<Edge>> InitializeGraph(string routersInfoFilePath)
