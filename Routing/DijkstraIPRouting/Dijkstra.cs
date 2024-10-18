@@ -21,10 +21,10 @@ public class Dijkstra
       {
          var currentVertex = ExtractLowestPriorityVertex(priorityQueue);
          shortestPath.Add(currentVertex);
-         // if (currentVertex.Name == destinationIp.Name)
-         // {
-         //    return shortestPath;
-         // }
+         if (currentVertex.Name == destinationIp.Name)
+         {
+            return shortestPath;
+         }
 
          foreach (Edge edge in routersGraph[currentVertex])
          {
@@ -84,6 +84,7 @@ public class Dijkstra
       if (adjacentVertex.Weight > currentVertex.Weight + edgeWeight)
       {
          adjacentVertex.Weight = currentVertex.Weight + edgeWeight;
+         adjacentVertex.Parent = currentVertex;
          return true;
       }
       return false;

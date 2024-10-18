@@ -10,15 +10,34 @@ public class Program
       var routersGraph = InitializeGraph(routersInfoFilePath);
 
       // Test some paths from the json file
-      Vertex sourceIp = routersGraph.Keys.Where(v => v.Name == "10.34.250.1").First();
+      Vertex sourceIp = routersGraph.Keys.Where(v => v.Name == "10.34.209.1").First();
       Vertex destinationIp = routersGraph.Keys.Where(v => v.Name == "10.34.166.1").First();
 
-      var shortestPaths = Dijkstra.DijkstraShortestPath(routersGraph, sourceIp, destinationIp);
+      var allShortestPathsSet = Dijkstra.DijkstraShortestPath(routersGraph, sourceIp, destinationIp);
+
+      // If the destinationIp vertex has no parent after running Dijkstra's, then
+      // there's no path from the source to the destination
+      if (destinationIp.Parent == null)
+      {
+         Console.WriteLine($"No path from {sourceIp.Name} to {destinationIp.Name} exists:");
+         Console.WriteLine("[]");
+         return;
+      }
+
+      var shortestPathFromSourceToDestination = new List<Vertex>();
+      Vertex currentVertex = destinationIp;
+      while (currentVertex.Parent != null)
+      {
+         shortestPathFromSourceToDestination.Add(currentVertex);
+         currentVertex = currentVertex.Parent;
+      }
+      // Add the source vertex to the path
+      shortestPathFromSourceToDestination.Add(sourceIp);
 
       Console.WriteLine($"Shortest path from {sourceIp.Name} to {destinationIp.Name}:");
-      foreach (Vertex vertex in shortestPaths)
+      for (int i = shortestPathFromSourceToDestination.Count - 1; i >= 0; i--)
       {
-         Console.WriteLine($"{vertex.Name}   distance: {vertex.Weight}");
+         Console.WriteLine($"{shortestPathFromSourceToDestination[i].Name}");
       }
 
    }
