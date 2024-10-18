@@ -13,33 +13,20 @@ public class Program
       Vertex sourceIp = routersGraph.Keys.Where(v => v.Name == "10.34.209.1").First();
       Vertex destinationIp = routersGraph.Keys.Where(v => v.Name == "10.34.166.1").First();
 
-      var allShortestPathsSet = Dijkstra.DijkstraShortestPath(routersGraph, sourceIp, destinationIp);
+      var shortestPath = Dijkstra.DijkstraShortestPath(routersGraph, sourceIp, destinationIp);
 
-      // If the destinationIp vertex has no parent after running Dijkstra's, then
-      // there's no path from the source to the destination
-      if (destinationIp.Parent == null)
+      Console.WriteLine($"{sourceIp.Name} -> {destinationIp.Name}:");
+      if (shortestPath.Count > 0)
       {
-         Console.WriteLine($"No path from {sourceIp.Name} to {destinationIp.Name} exists:");
+         foreach (Vertex v in shortestPath)
+         {
+            Console.WriteLine(v.Name);
+         }
+      }
+      else
+      {
          Console.WriteLine("[]");
-         return;
       }
-
-      var shortestPathFromSourceToDestination = new List<Vertex>();
-      Vertex currentVertex = destinationIp;
-      while (currentVertex.Parent != null)
-      {
-         shortestPathFromSourceToDestination.Add(currentVertex);
-         currentVertex = currentVertex.Parent;
-      }
-      // Add the source vertex to the path
-      shortestPathFromSourceToDestination.Add(sourceIp);
-
-      Console.WriteLine($"Shortest path from {sourceIp.Name} to {destinationIp.Name}:");
-      for (int i = shortestPathFromSourceToDestination.Count - 1; i >= 0; i--)
-      {
-         Console.WriteLine($"{shortestPathFromSourceToDestination[i].Name}");
-      }
-
    }
 
    private static Dictionary<Vertex, List<Edge>> InitializeGraph(string routersInfoFilePath)

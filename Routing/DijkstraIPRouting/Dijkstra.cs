@@ -14,16 +14,16 @@ public class Dijkstra
       Vertex sourceIp,
       Vertex destinationIp)
    {
-      var shortestPath = new List<Vertex>();
+      var allShortestPaths = new List<Vertex>();
       var priorityQueue = InitializeQueue(sourceIp, routersGraph);
 
       while (priorityQueue.Count > 0)
       {
          var currentVertex = ExtractLowestPriorityVertex(priorityQueue);
-         shortestPath.Add(currentVertex);
+         allShortestPaths.Add(currentVertex);
          if (currentVertex.Name == destinationIp.Name)
          {
-            return shortestPath;
+            break;
          }
 
          foreach (Edge edge in routersGraph[currentVertex])
@@ -35,7 +35,9 @@ public class Dijkstra
             }
          }
       }
-      return shortestPath;
+      List<Vertex> path = GetPathFromTree(destinationIp);
+
+      return path;
    }
 
    /// <summary>
@@ -99,5 +101,35 @@ public class Dijkstra
             v.Weight = vertex.Weight;
          }
       }
+   }
+
+   /// <summary>
+   /// Dijkstra's algorithm creates a tree of shortest path from the destination vertex to the source vertex
+   /// by assigning a parent corresponding to the vertex that leads to the shortest path.
+   /// By traversing the tree in reverse order, we can obtain the shortest path from the source to the destination.
+   /// </summary>
+   /// <param name="destinationIp"></param>
+   /// <returns></returns>
+   private static List<Vertex> GetPathFromTree(Vertex destinationIp)
+   {
+      var shortestPathFromSourceToDestination = new List<Vertex>();
+
+      // If the destinationIp vertex has no parent after running Dijkstra's, then
+      // there's no path from the source to the destination
+      if (destinationIp.Parent == null)
+      {
+         return shortestPathFromSourceToDestination;
+      }
+
+      Vertex currentVertex = destinationIp;
+      while (currentVertex.Parent != null)
+      {
+         shortestPathFromSourceToDestination.Add(currentVertex);
+         currentVertex = currentVertex.Parent;
+      }
+      // Add the source vertex to the path
+      shortestPathFromSourceToDestination.Add(currentVertex);
+
+      return shortestPathFromSourceToDestination.Reverse<Vertex>().ToList();
    }
 }
