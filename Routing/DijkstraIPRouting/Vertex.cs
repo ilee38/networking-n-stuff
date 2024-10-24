@@ -19,10 +19,11 @@ public class Vertex
    /// </summary>
    public Vertex? Parent { get; set; } = null;
 
-   public Vertex(string name, int weight=int.MaxValue)
+   public Vertex(string name, int weight=int.MaxValue, Vertex? parent=null)
    {
       Name = name;
       Weight = weight;
+      Parent = parent;
    }
 
 }
