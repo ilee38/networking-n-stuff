@@ -11,5 +11,8 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\NetFunctions\NetFunctions.csproj" />
+  </ItemGroup>
 
 </Project>

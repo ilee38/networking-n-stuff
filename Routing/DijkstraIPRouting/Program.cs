@@ -10,8 +10,8 @@ public class Program
       var routersGraph = InitializeGraph(routersInfoFilePath);
 
       // Test some paths from the json file
-      Vertex sourceIp = routersGraph.Keys.Where(v => v.Name == "10.34.209.1").First();
-      Vertex destinationIp = routersGraph.Keys.Where(v => v.Name == "10.34.166.1").First();
+      Vertex sourceIp = routersGraph.Keys.Where(v => v.Name == "10.34.209.229").First();
+      Vertex destinationIp = routersGraph.Keys.Where(v => v.Name == "10.34.166.26").First();
 
       var shortestPath = Dijkstra.DijkstraShortestPath(routersGraph, sourceIp, destinationIp);
 
@@ -41,10 +41,11 @@ public class Program
       {
          var currentRouter = routers.Current.Value;
          var currentRouterIP = routers.Current.Name;
+         var currentRouterNetMask = currentRouter.GetProperty("netmask").GetString();
          var currentRouterConnections = currentRouter.GetProperty("connections").EnumerateObject();
 
          // Create a new vertex for the current router and add it to the graph
-         Vertex sourceVertex = new(currentRouterIP);
+         Vertex sourceVertex = new(currentRouterIP, netMask: currentRouterNetMask!);
          routersGraph.Add(sourceVertex, new List<Edge>());
 
          // Add edges to the graph for each connection from the current router

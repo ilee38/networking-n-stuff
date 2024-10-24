@@ -5,8 +5,6 @@ namespace NetFunctionsTests;
 
 public class NetFunctionsTests
 {
-   private readonly NetFunctionsTools netFunctions = new();
-
    [Fact]
    public void Ipv4ToValueTests()
    {
@@ -15,8 +13,8 @@ public class NetFunctionsTests
       var ipAddress2 = "198.51.100.10";
 
       //Act
-      var result1 = netFunctions.Ipv4ToValue(ipAddress1);
-      var result2 = netFunctions.Ipv4ToValue(ipAddress2);
+      var result1 = NetFunctionsTools.Ipv4ToValue(ipAddress1);
+      var result2 = NetFunctionsTools.Ipv4ToValue(ipAddress2);
 
       //Assert
       Assert.Equal(4294901760, result1);
@@ -30,7 +28,7 @@ public class NetFunctionsTests
       UInt32 address = 3325256714;
 
       // Act
-      var result = netFunctions.ValueToIpv4(address);
+      var result = NetFunctionsTools.ValueToIpv4(address);
 
       // Assert
       Assert.Equal("198.51.100.10", result);
@@ -44,8 +42,8 @@ public class NetFunctionsTests
       var slash2 = "10.20.30.40/23";
 
       // Act
-      var result1 = netFunctions.GetSubnetMaskValue(slash1);
-      var result2 = netFunctions.GetSubnetMaskValue(slash2);
+      var result1 = NetFunctionsTools.GetSubnetMaskValue(slash1);
+      var result2 = NetFunctionsTools.GetSubnetMaskValue(slash2);
 
       // Assert
       Assert.Equal(4294901760, result1);
@@ -65,8 +63,8 @@ public class NetFunctionsTests
       var slash2 = "/16";
 
       //Act
-      var result1 = netFunctions.IPsSameSubnet(ipAddress1, ipAddress2, slash1);
-      var result2 = netFunctions.IPsSameSubnet(ipAddress3, ipAddress4, slash2);
+      var result1 = NetFunctionsTools.IPsSameSubnet(ipAddress1, ipAddress2, slash1);
+      var result2 = NetFunctionsTools.IPsSameSubnet(ipAddress3, ipAddress4, slash2);
 
       //Assert
       Assert.True(result1);
@@ -81,7 +79,7 @@ public class NetFunctionsTests
       UInt32 netMask = 0xffffff00;
 
       // Act
-      var result = netFunctions.GetNetwork(iPValue, netMask);
+      var result = NetFunctionsTools.GetNetwork(iPValue, netMask);
 
       // Assert
       UInt32 expected = 0x01020300;
@@ -97,8 +95,8 @@ public class NetFunctionsTests
       string ipAddress2 = "1.2.5.6";
 
       // Act
-      string sameSubnetResult = netFunctions.FindRouterForIP(routersFilePath, ipAddress1);
-      string differentSubnetResult = netFunctions.FindRouterForIP(routersFilePath, ipAddress2);
+      string sameSubnetResult = NetFunctionsTools.FindRouterForIP(routersFilePath, ipAddress1);
+      string differentSubnetResult = NetFunctionsTools.FindRouterForIP(routersFilePath, ipAddress2);
 
       // Assert
       Assert.Equal("1.2.3.1", sameSubnetResult);

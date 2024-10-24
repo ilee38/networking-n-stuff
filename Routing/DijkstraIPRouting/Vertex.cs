@@ -17,13 +17,18 @@ public class Vertex
    /// <summary>
    ///  The parent vertex of the current vertex in the shortest path.
    /// </summary>
-   public Vertex? Parent { get; set; } = null;
+   public Vertex? Parent { get; set; }
 
-   public Vertex(string name, int weight=int.MaxValue, Vertex? parent=null)
+   /// <summary>
+   /// The subnet mask of the vertex representing a router node.
+   /// </summary>
+   public string NetMask { get; set; }
+
+   public Vertex(string name, int weight=int.MaxValue, Vertex? parent=null, string netMask="")
    {
       Name = name;
       Weight = weight;
       Parent = parent;
+      NetMask = netMask;
    }
-
 }

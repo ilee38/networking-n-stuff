@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using NetFunctions;
 
 namespace DijkstraIPRouting;
 
@@ -14,14 +15,22 @@ public class Dijkstra
       Vertex sourceIp,
       Vertex destinationIp)
    {
+      if (SameNetwork(sourceIp, destinationIp))
+      {
+         return [];
+      }
+
+      Vertex? sourceRouter = GetRouterFromIp(sourceIp, routersGraph);
+      Vertex? destinationRouter = GetRouterFromIp(destinationIp, routersGraph);
+
       var allShortestPaths = new List<Vertex>();
-      var priorityQueue = InitializeQueue(sourceIp, routersGraph);
+      var priorityQueue = InitializeQueue(sourceRouter!, routersGraph);
 
       while (priorityQueue.Count > 0)
       {
          var currentVertex = ExtractLowestPriorityVertex(priorityQueue);
          allShortestPaths.Add(currentVertex);
-         if (currentVertex.Name == destinationIp.Name)
+         if (currentVertex.Name == destinationRouter!.Name)
          {
             break;
          }
@@ -35,7 +44,7 @@ public class Dijkstra
             }
          }
       }
-      List<Vertex> path = GetPathFromTree(destinationIp);
+      List<Vertex> path = GetPathFromTree(destinationRouter!);
 
       return path;
    }
@@ -131,5 +140,27 @@ public class Dijkstra
       shortestPathFromSourceToDestination.Add(currentVertex);
 
       return shortestPathFromSourceToDestination.Reverse<Vertex>().ToList();
+   }
+
+   private static bool SameNetwork(Vertex sourceIp, Vertex destinationIp)
+   {
+      var sourceIpValue = NetFunctionsTools.Ipv4ToValue(sourceIp.Name);
+      var sourceIpMask = NetFunctionsTools.GetSubnetMaskValue(sourceIp.NetMask);
+      var destinationIpValue = NetFunctionsTools.Ipv4ToValue(destinationIp.Name);
+      var destinationIpMask = NetFunctionsTools.GetSubnetMaskValue(destinationIp.NetMask);
+
+      return (sourceIpValue & sourceIpMask) == (destinationIpValue & destinationIpMask);
+   }
+
+   private static Vertex? GetRouterFromIp(Vertex ip, Dictionary<Vertex, List<Edge>> routersGraph)
+   {
+      foreach (Vertex router in routersGraph.Keys)
+      {
+         if (NetFunctionsTools.IPsSameSubnet(ip.Name, router.Name, router.NetMask))
+         {
+            return router;
+         }
+      }
+      return null;
    }
 }

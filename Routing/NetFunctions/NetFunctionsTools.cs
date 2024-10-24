@@ -13,7 +13,7 @@ public class NetFunctionsTools
    /// </summary>
    /// <param name="ipv4Address"></param>
    /// <returns>An integer value representing the IP address</returns>
-   public UInt32 Ipv4ToValue(string ipv4Address)
+   public static UInt32 Ipv4ToValue(string ipv4Address)
    {
       string[] octetList = ipv4Address.Split('.');
       byte[] bytes = new byte[octetList.Length];
@@ -33,7 +33,7 @@ public class NetFunctionsTools
    /// Converts a 32-bit integer value to dots-and-numbers IP address
    /// <param name="address"></param>
    /// <returns>A string representation of the IP address</returns>
-   public string ValueToIpv4(UInt32 address)
+   public static string ValueToIpv4(UInt32 address)
    {
       var mask = 0x_000000FF;
 
@@ -59,7 +59,7 @@ public class NetFunctionsTools
    /// </summary>
    /// <param name="slash"></param>
    /// <returns>An integer value for the subnet mask</returns>
-   public UInt32 GetSubnetMaskValue(string slash)
+   public static UInt32 GetSubnetMaskValue(string slash)
    {
       string hostBitsString = slash.Split('/')[1];
       int hostBits = int.Parse(hostBitsString);
@@ -76,7 +76,7 @@ public class NetFunctionsTools
    /// <param name="iP2"></param>
    /// <param name="slash"></param>
    /// <returns></returns>
-   public bool IPsSameSubnet(string iP1, string iP2, string slash)
+   public static bool IPsSameSubnet(string iP1, string iP2, string slash)
    {
       UInt32 subnetMask = GetSubnetMaskValue(slash);
       UInt32 iP1Value = Ipv4ToValue(iP1);
@@ -92,7 +92,7 @@ public class NetFunctionsTools
    /// <param name="iPValue">IP address as integer value</param>
    /// <param name="netMask">Mask as integer value</param>
    /// <returns>The network portion of the address.</returns>
-   public UInt32 GetNetwork(UInt32 iPValue, UInt32 netMask)
+   public static UInt32 GetNetwork(UInt32 iPValue, UInt32 netMask)
    {
       return iPValue & netMask;
    }
@@ -107,7 +107,7 @@ public class NetFunctionsTools
    /// The IP address of the corresponding router, or an empty string if no router matches the subnet
    /// of the given address.
    /// </returns>
-   public string FindRouterForIP(string routerInfoFilePath, string iPAddress)
+   public static string FindRouterForIP(string routerInfoFilePath, string iPAddress)
    {
       string jsonString = File.ReadAllText(routerInfoFilePath);
 
