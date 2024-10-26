@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using NetFunctions;
+using DijkstraIPRouting.Tools;
 
 namespace DijkstraIPRouting;
 
@@ -11,13 +11,13 @@ public class Dijkstra
       Vertex sourceIp,
       Vertex destinationIp)
    {
-      if (SameNetwork(sourceIp, destinationIp))
+      if (DijkstraTools.SameNetwork(sourceIp, destinationIp))
       {
          return [];
       }
 
-      Vertex? sourceRouter = GetRouterFromIp(sourceIp, routersGraph);
-      Vertex? destinationRouter = GetRouterFromIp(destinationIp, routersGraph);
+      Vertex? sourceRouter = DijkstraTools.GetRouterFromIp(sourceIp, routersGraph);
+      Vertex? destinationRouter = DijkstraTools.GetRouterFromIp(destinationIp, routersGraph);
 
       var allShortestPaths = new List<Vertex>();
       var priorityQueue = InitializeQueue(sourceRouter!, routersGraph);
@@ -40,7 +40,7 @@ public class Dijkstra
             }
          }
       }
-      List<Vertex> path = GetPathFromTree(destinationRouter!);
+      List<Vertex> path = DijkstraTools.GetPathFromTree(destinationRouter!);
 
       return path;
    }
@@ -106,57 +106,5 @@ public class Dijkstra
             v.Weight = vertex.Weight;
          }
       }
-   }
-
-   /// <summary>
-   /// Dijkstra's algorithm creates a tree of shortest path from the destination vertex to the source vertex
-   /// by assigning a parent corresponding to the vertex that leads to the shortest path.
-   /// By traversing the tree in reverse order, we can obtain the shortest path from the source to the destination.
-   /// </summary>
-   /// <param name="destinationIp"></param>
-   /// <returns></returns>
-   private static List<Vertex> GetPathFromTree(Vertex destinationIp)
-   {
-      var shortestPathFromSourceToDestination = new List<Vertex>();
-
-      // If the destinationIp vertex has no parent after running Dijkstra's, then
-      // there's no path from the source to the destination
-      if (destinationIp.Parent == null)
-      {
-         return shortestPathFromSourceToDestination;
-      }
-
-      Vertex currentVertex = destinationIp;
-      while (currentVertex.Parent != null)
-      {
-         shortestPathFromSourceToDestination.Add(currentVertex);
-         currentVertex = currentVertex.Parent;
-      }
-      // Add the source vertex to the path
-      shortestPathFromSourceToDestination.Add(currentVertex);
-
-      return shortestPathFromSourceToDestination.Reverse<Vertex>().ToList();
-   }
-
-   private static bool SameNetwork(Vertex sourceIp, Vertex destinationIp)
-   {
-      var sourceIpValue = NetFunctionsTools.Ipv4ToValue(sourceIp.Name);
-      var sourceIpMask = NetFunctionsTools.GetSubnetMaskValue(sourceIp.NetMask);
-      var destinationIpValue = NetFunctionsTools.Ipv4ToValue(destinationIp.Name);
-      var destinationIpMask = NetFunctionsTools.GetSubnetMaskValue(destinationIp.NetMask);
-
-      return (sourceIpValue & sourceIpMask) == (destinationIpValue & destinationIpMask);
-   }
-
-   private static Vertex? GetRouterFromIp(Vertex ip, Dictionary<Vertex, List<Edge>> routersGraph)
-   {
-      foreach (Vertex router in routersGraph.Keys)
-      {
-         if (NetFunctionsTools.IPsSameSubnet(ip.Name, router.Name, router.NetMask))
-         {
-            return router;
-         }
-      }
-      return null;
    }
 }
