@@ -16,7 +16,7 @@ public class DijkstraIPRoutingTests
         var destinationIp = new Vertex("10.34.166.26", netMask: "/24");
 
         // Act
-        var shortestPath = Dijkstra.DijkstraShortestPath(_graph, sourceIp, destinationIp);
+        var shortestPath = Dijkstra.ShortestPath(_graph, sourceIp, destinationIp);
 
         // Assert
         Assert.True(shortestPath.Count == 5);
@@ -35,7 +35,7 @@ public class DijkstraIPRoutingTests
         var destinationIp = new Vertex("10.34.52.244", netMask: "/24");
 
         // Act
-        var shortestPath = Dijkstra.DijkstraShortestPath(_graph, sourceIp, destinationIp);
+        var shortestPath = Dijkstra.ShortestPath(_graph, sourceIp, destinationIp);
 
         // Assert
         Assert.True(shortestPath.Count == 0);

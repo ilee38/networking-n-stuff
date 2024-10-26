@@ -6,11 +6,7 @@ namespace DijkstraIPRouting;
 
 public class Dijkstra
 {
-   public Dijkstra()
-   {
-   }
-
-   public static List<Vertex> DijkstraShortestPath(
+   public static List<Vertex> ShortestPath(
       Dictionary<Vertex, List<Edge>> routersGraph,
       Vertex sourceIp,
       Vertex destinationIp)
