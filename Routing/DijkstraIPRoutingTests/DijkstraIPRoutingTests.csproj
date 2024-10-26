@@ -24,4 +24,10 @@
     <ProjectReference Include="..\DijkstraIPRouting\DijkstraIPRouting.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="routerinfo.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
