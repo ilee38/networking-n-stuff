@@ -31,13 +31,17 @@ public class DijkstraIPRoutingTests
     public void DijkstraShortestPathNoPathTest()
     {
         // Arrange
-        var sourceIp = new Vertex("10.34.52.187", netMask: "/24");
-        var destinationIp = new Vertex("10.34.52.244", netMask: "/24");
+        var sourceIp1 = new Vertex("10.34.52.187", netMask: "/24");
+        var destinationIp1 = new Vertex("10.34.52.244", netMask: "/24");
+        var sourceIp2 = new Vertex("10.34.79.218", netMask: "/24");
+        var destinationIp2 = new Vertex("10.34.79.58", netMask: "/24");
 
         // Act
-        var shortestPath = Dijkstra.ShortestPath(_graph, sourceIp, destinationIp);
+        var shortestPath1 = Dijkstra.ShortestPath(_graph, sourceIp1, destinationIp1);
+        var shortestPath2 = Dijkstra.ShortestPath(_graph, sourceIp2, destinationIp2);
 
         // Assert
-        Assert.True(shortestPath.Count == 0);
+        Assert.True(shortestPath1.Count == 0);
+        Assert.True(shortestPath2.Count == 0);
     }
 }
