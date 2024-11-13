@@ -10,8 +10,10 @@ namespace DijkstraIPRouting.PriorityQueue;
 /// </summary>
 public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>
 {
-    /// <inheritdoc/>
-    public List<QueueItem<Vertex>> Queue { get; set; }
+    /// <summary>
+    /// A list to represent the min binary heap for the priority queue.
+    /// </summary>
+    private List<QueueItem<Vertex>> Queue { get; set; }
 
     public ChangeablePriorityQueue()
     {
@@ -83,11 +85,19 @@ public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>
     /// <param name="locator">The locator of the element to update.</param>
     /// <param name="key">The new key for the element.</param>
     /// <param name="value">The new value for the element.</param>
-    public void Update(int locator, int key, Vertex value)
+    public void Update(int locator, int key, Vertex? value=null)
     {
         var elementToUpdate = Queue[locator];
         elementToUpdate.Key = key;
-        elementToUpdate.Value = value;
+        if (value != null)
+        {
+            elementToUpdate.Value = value;
+        }
+        else
+        {
+            elementToUpdate.Value.Weight = key;
+        }
+
         Sift(locator);
     }
 

@@ -3,11 +3,6 @@ namespace DijkstraIPRouting;
 public interface IPriorityQueue<T>
 {
     /// <summary>
-    /// A priority queue represented with a Min Heap
-    /// </summary>
-    List<T> Queue { get; set; }
-
-    /// <summary>
     /// Adds an element to the priority queue with the given priority.
     /// </summary>
     /// <param name="key">Represents the priority of the element.</param>
