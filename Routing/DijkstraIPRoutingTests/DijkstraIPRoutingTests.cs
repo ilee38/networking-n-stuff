@@ -6,7 +6,7 @@ namespace DijkstraIPRoutingTests;
 public class DijkstraIPRoutingTests
 {
     private const string RoutersFilePath = "routerinfo.json";
-    private readonly Dictionary<Vertex, List<Edge>> _graph = DijkstraTools.InitializeGraph(RoutersFilePath);
+    private readonly Dijkstra _dijkstra = new Dijkstra(DijkstraTools.InitializeGraph(RoutersFilePath));
 
     [Fact]
     public void DijkstraShortestPathTest()
@@ -16,7 +16,7 @@ public class DijkstraIPRoutingTests
         var destinationIp = new Vertex("10.34.166.26", netMask: "/24");
 
         // Act
-        var shortestPath = Dijkstra.ShortestPath(_graph, sourceIp, destinationIp);
+        var shortestPath = _dijkstra.ShortestPath(sourceIp, destinationIp);
 
         // Assert
         Assert.True(shortestPath.Count == 5);
@@ -37,8 +37,8 @@ public class DijkstraIPRoutingTests
         var destinationIp2 = new Vertex("10.34.79.58", netMask: "/24");
 
         // Act
-        var shortestPath1 = Dijkstra.ShortestPath(_graph, sourceIp1, destinationIp1);
-        var shortestPath2 = Dijkstra.ShortestPath(_graph, sourceIp2, destinationIp2);
+        var shortestPath1 = _dijkstra.ShortestPath(sourceIp1, destinationIp1);
+        var shortestPath2 = _dijkstra.ShortestPath(sourceIp2, destinationIp2);
 
         // Assert
         Assert.True(shortestPath1.Count == 0);

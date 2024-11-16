@@ -4,23 +4,27 @@ using DijkstraIPRouting.Tools;
 
 namespace DijkstraIPRouting;
 
-public class Dijkstra
+public class Dijkstra : IDijkstra
 {
-   public static List<Vertex> ShortestPath(
-      Dictionary<Vertex, List<Edge>> routersGraph,
-      Vertex sourceIp,
-      Vertex destinationIp)
+    private readonly Dictionary<Vertex, List<Edge>> _routersGraph;
+
+    public Dijkstra(Dictionary<Vertex, List<Edge>> routersGraph)
+    {
+        _routersGraph = routersGraph;
+    }
+
+   public List<Vertex> ShortestPath(Vertex sourceIp, Vertex destinationIp)
    {
       if (DijkstraTools.SameNetwork(sourceIp, destinationIp))
       {
          return [];
       }
 
-      Vertex? sourceRouter = DijkstraTools.GetRouterFromIp(sourceIp, routersGraph);
-      Vertex? destinationRouter = DijkstraTools.GetRouterFromIp(destinationIp, routersGraph);
+      Vertex? sourceRouter = DijkstraTools.GetRouterFromIp(sourceIp, _routersGraph);
+      Vertex? destinationRouter = DijkstraTools.GetRouterFromIp(destinationIp, _routersGraph);
 
       var allShortestPaths = new List<Vertex>();
-      var priorityQueue = InitializeQueue(sourceRouter!, routersGraph);
+      var priorityQueue = InitializeQueue(sourceRouter!, _routersGraph);
 
       while (priorityQueue.Count > 0)
       {
@@ -31,9 +35,9 @@ public class Dijkstra
             break;
          }
 
-         foreach (Edge edge in routersGraph[currentVertex])
+         foreach (Edge edge in _routersGraph[currentVertex])
          {
-            var adjacentVertex = routersGraph.Keys.Where(v => v.Name == edge.Destination.Name).First();
+            var adjacentVertex = _routersGraph.Keys.Where(v => v.Name == edge.Destination.Name).First();
             if (Relax(currentVertex, adjacentVertex, edge.EdgeWeight))
             {
                UpdatePriorityInQueue(priorityQueue, adjacentVertex);
