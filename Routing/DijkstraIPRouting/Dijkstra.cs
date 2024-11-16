@@ -56,7 +56,6 @@ public class Dijkstra : IDijkstra
    /// Therefore, we will use a List<Vertex> to store the vertices with their weight estimates (priorities).
    /// </summary>
    /// <param name="sourceIp"></param>
-   /// <param name="routersGraph"></param>
    /// <returns></returns>
    private List<Vertex> InitializeQueue(Vertex sourceIp)
    {
