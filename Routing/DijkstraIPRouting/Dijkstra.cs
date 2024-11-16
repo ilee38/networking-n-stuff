@@ -24,7 +24,7 @@ public class Dijkstra : IDijkstra
       Vertex? destinationRouter = DijkstraTools.GetRouterFromIp(destinationIp, _routersGraph);
 
       var allShortestPaths = new List<Vertex>();
-      var priorityQueue = InitializeQueue(sourceRouter!, _routersGraph);
+      var priorityQueue = InitializeQueue(sourceRouter!);
 
       while (priorityQueue.Count > 0)
       {
@@ -58,10 +58,10 @@ public class Dijkstra : IDijkstra
    /// <param name="sourceIp"></param>
    /// <param name="routersGraph"></param>
    /// <returns></returns>
-   private static List<Vertex> InitializeQueue(Vertex sourceIp, Dictionary<Vertex, List<Edge>> routersGraph)
+   private List<Vertex> InitializeQueue(Vertex sourceIp)
    {
       var Q = new List<Vertex>();
-      foreach (Vertex vertex in routersGraph.Keys)
+      foreach (Vertex vertex in _routersGraph.Keys)
       {
          if (vertex.Name.Equals(sourceIp.Name))
          {
