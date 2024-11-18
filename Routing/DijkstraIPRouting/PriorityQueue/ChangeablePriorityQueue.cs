@@ -85,7 +85,8 @@ public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>
     /// <param name="locator">The locator of the element to update.</param>
     /// <param name="key">The new key for the element.</param>
     /// <param name="value">The new value for the element.</param>
-    public void Update(int locator, int key, Vertex? value=null)
+    /// <returns>The new locator of  the updated element</returns>
+    public int Update(int locator, int key, Vertex? value=null)
     {
         var elementToUpdate = Queue[locator];
         elementToUpdate.Key = key;
@@ -99,6 +100,7 @@ public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>
         }
 
         Sift(locator);
+        return elementToUpdate.Locator;
     }
 
     /// <summary>

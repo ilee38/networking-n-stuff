@@ -58,7 +58,7 @@ public static class DijkstraTools
     /// By traversing the tree in reverse order, we can obtain the shortest path from the source to the destination.
     /// </summary>
     /// <param name="destinationIp">The destination IP address (i.e. Vertex) from where to start tracing the source IP</param>
-    /// <returns></returns>
+    /// <returns>An ordered list of the vertices forming the shortest path from source to destination.</returns>
     public static List<Vertex> GetPathFromTree(Vertex destinationIp)
     {
         var shortestPathFromSourceToDestination = new List<Vertex>();

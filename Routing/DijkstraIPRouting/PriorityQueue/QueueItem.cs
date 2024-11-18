@@ -6,7 +6,7 @@ namespace DijkstraIPRouting.PriorityQueue;
 public class QueueItem<T>
 {
     /// <summary>
-    /// The key represents the priority of the item.
+    /// The key represents the priority of the item in the queue.
     /// </summary>
     public int Key { get; set; }
 
@@ -16,7 +16,7 @@ public class QueueItem<T>
     public T Value { get; set; }
 
     /// <summary>
-    /// Represents the location of the item in the collection. I.e. the index in a List
+    /// Represents the location of the item in the collection. I.e. the index in a List.
     /// </summary>
     public int Locator { get; set; }
 }

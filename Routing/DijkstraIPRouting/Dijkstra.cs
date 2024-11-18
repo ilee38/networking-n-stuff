@@ -35,7 +35,7 @@ public class Dijkstra : IDijkstra
             break;
          }
 
-         foreach (Edge edge in _routersGraph[currentVertex])
+         foreach (var edge in _routersGraph[currentVertex])
          {
             var adjacentVertex = _routersGraph.Keys.Where(v => v.Name == edge.Destination.Name).First();
             if (Relax(currentVertex, adjacentVertex, edge.EdgeWeight))
@@ -44,7 +44,7 @@ public class Dijkstra : IDijkstra
             }
          }
       }
-      List<Vertex> path = DijkstraTools.GetPathFromTree(destinationRouter!);
+      var path = DijkstraTools.GetPathFromTree(destinationRouter!);
 
       return path;
    }
@@ -60,16 +60,9 @@ public class Dijkstra : IDijkstra
    private List<Vertex> InitializeQueue(Vertex sourceIp)
    {
       var Q = new List<Vertex>();
-      foreach (Vertex vertex in _routersGraph.Keys)
+      foreach (var vertex in _routersGraph.Keys)
       {
-         if (vertex.Name.Equals(sourceIp.Name))
-         {
-            vertex.Weight = 0;
-         }
-         else
-         {
-            vertex.Weight = int.MaxValue;
-         }
+         vertex.Weight = vertex.Name.Equals(sourceIp.Name) ? 0 : vertex.Weight = int.MaxValue;
          Q.Add(vertex);
       }
       return Q;
@@ -89,6 +82,13 @@ public class Dijkstra : IDijkstra
       return minVertex;
    }
 
+   /// <summary>
+   /// Performs edge relaxation and updates the vertex's weight.
+   /// </summary>
+   /// <param name="currentVertex"></param>
+   /// <param name="adjacentVertex"></param>
+   /// <param name="edgeWeight"></param>
+   /// <returns>True if the weight was relaxed, false otherwise.</returns>
    private static bool Relax(Vertex currentVertex, Vertex adjacentVertex, int edgeWeight)
    {
       if (adjacentVertex.Weight > currentVertex.Weight + edgeWeight)
