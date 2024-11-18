@@ -193,8 +193,8 @@ public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>
     private void SwapElements(int i, int j)
     {
         (Queue[i], Queue[j]) = (Queue[j], Queue[i]);
-        Queue[i].Locator = j;
-        Queue[j].Locator = i;
+        Queue[i].Locator = i;
+        Queue[j].Locator = j;
     }
 
     private bool HasLeftChild(int index)
