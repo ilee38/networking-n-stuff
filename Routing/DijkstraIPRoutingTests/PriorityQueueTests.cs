@@ -58,12 +58,15 @@ public class PriorityQueueTests
         InitializePriorityQueue();
 
         // Act
-        _priorityQueue.Update(6, 2);
+        var locator = 6;
+        var newLocator = _priorityQueue.Update(locator, 2);
         var newMinElement = _priorityQueue.Min();
 
         // Assert
         Assert.Equal(2, newMinElement.Weight);
         Assert.Equal("B", newMinElement.Name);
+        Assert.NotEqual(locator, newLocator);
+        Assert.Equal(0, newLocator);
     }
 
     private void InitializePriorityQueue()

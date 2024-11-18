@@ -3,7 +3,7 @@ using DijkstraIPRouting.Tools;
 
 namespace DijkstraIPRoutingTests;
 
-public class DijkstraIPRoutingTests
+public class DijkstraTests
 {
     private const string RoutersFilePath = "routerinfo.json";
     private readonly Dijkstra _dijkstra = new Dijkstra(DijkstraTools.InitializeGraph(RoutersFilePath));
