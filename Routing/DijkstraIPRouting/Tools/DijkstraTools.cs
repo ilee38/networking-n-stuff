@@ -25,25 +25,37 @@ public static class DijkstraTools
         using JsonDocument doc = JsonDocument.Parse(jsonString);
         JsonElement root = doc.RootElement;
         var routers = root.GetProperty("routers").EnumerateObject();
+
+        // Create all outer-level nodes
         while (routers.MoveNext())
         {
             var currentRouter = routers.Current.Value;
-            var currentRouterIP = routers.Current.Name;
+            var currentRouterIp = routers.Current.Name;
             var currentRouterNetMask = currentRouter.GetProperty("netmask").GetString();
             var currentRouterConnections = currentRouter.GetProperty("connections").EnumerateObject();
 
             // Create a new vertex for the current router and add it to the graph
-            Vertex sourceVertex = new(currentRouterIP, netMask: currentRouterNetMask!);
+            Vertex sourceVertex = new(currentRouterIp, netMask: currentRouterNetMask!);
             routersGraph.Add(sourceVertex, new List<Edge>());
+        }
+
+        // Create edges (connections) for each of the outer-level nodes
+        routers.Reset();
+        while (routers.MoveNext())
+        {
+            var currentRouter = routers.Current.Value;
+            var currentRouterIp = routers.Current.Name;
+            var currentRouterConnections = currentRouter.GetProperty("connections").EnumerateObject();
+            var sourceVertex = routersGraph.Keys.Where(x => x.Name == currentRouterIp).First();
 
             // Add edges to the graph for each connection from the current router
             while (currentRouterConnections.MoveNext())
             {
                 var connection = currentRouterConnections.Current.Value;
-                var connectionIP = currentRouterConnections.Current.Name;
+                var connectionIp = currentRouterConnections.Current.Name;
                 var connectionWeight = connection.GetProperty("ad").GetInt32();
-                Vertex destinationVertex = new(connectionIP);
-                Edge e = new (sourceVertex, destinationVertex, connectionWeight);
+                var destinationVertex = routersGraph.Keys.Where(x => x.Name == connectionIp).First();
+                Edge e = new(sourceVertex, destinationVertex, connectionWeight);
 
                 // Add the edge to the graph
                 routersGraph[sourceVertex].Add(e);
