@@ -37,7 +37,7 @@ public class Dijkstra : IDijkstra
 
          foreach (var edge in _routersGraph[currentVertex])
          {
-            var adjacentVertex = _routersGraph.Keys.Where(v => v.Name == edge.Destination.Name).First();
+            var adjacentVertex = edge.Destination;
             if (Relax(currentVertex, adjacentVertex, edge.EdgeWeight))
             {
                UpdatePriorityInQueue(priorityQueue, adjacentVertex);
