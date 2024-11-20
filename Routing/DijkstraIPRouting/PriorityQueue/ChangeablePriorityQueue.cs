@@ -1,4 +1,7 @@
+using System.Collections;
+using System.Diagnostics;
 using System.Reflection;
+using NotImplementedException = System.NotImplementedException;
 
 namespace DijkstraIPRouting.PriorityQueue;
 
@@ -8,7 +11,7 @@ namespace DijkstraIPRouting.PriorityQueue;
 /// the second item is the Vertex element.
 /// To represent the changeable priority queue, we use a Min-Heap implemented using an array-based structure (i.e. a List).
 /// </summary>
-public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>
+public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>, IEnumerable<QueueItem<Vertex>>
 {
     /// <summary>
     /// A list to represent the min binary heap for the priority queue.
@@ -215,5 +218,60 @@ public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>
     private QueueItem<Vertex> RightChild(int index)
     {
         return Queue[index * 2 + 2];
+    }
+
+    public IEnumerator<QueueItem<Vertex>> GetEnumerator()
+    {
+        return new ChangeablePriorityQueueEnumerator(Queue);
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    /// <summary>
+    /// Implements the IEnumerator interface.
+    /// </summary>
+    private class ChangeablePriorityQueueEnumerator() : IEnumerator<QueueItem<Vertex>>
+    {
+        private readonly List<QueueItem<Vertex>> _queue;
+        private int _position = -1;
+
+        public ChangeablePriorityQueueEnumerator(List<QueueItem<Vertex>> queue) : this()
+        {
+            _queue = queue;
+        }
+
+        public bool MoveNext()
+        {
+            _position++;
+            return _position < _queue.Count;
+        }
+
+        public void Reset()
+        {
+            _position = -1;
+        }
+
+        public QueueItem<Vertex> Current
+        {
+            get
+            {
+                if (_position < 0 || _position > _queue.Count)
+                {
+                    throw new InvalidOperationException();
+                }
+
+                return _queue[_position];
+            }
+        }
+
+        object? IEnumerator.Current => Current;
+
+        public void Dispose()
+        {
+            // No resources to release
+        }
     }
 }

@@ -15,7 +15,7 @@ public class DijkstraPQ : IDijkstra
     ///  A dictionary mapping the graph vertices to its location in the priority queue (needed to efficiently perform updates
     /// to the priority queue elements).
     /// </summary>
-    private readonly IDictionary<Vertex, int> vertexLocators = new Dictionary<Vertex, int>();
+    private readonly IDictionary<Vertex, int> _vertexLocators = new Dictionary<Vertex, int>();
 
     public DijkstraPQ(Dictionary<Vertex, List<Edge>> routersGraph)
     {
@@ -47,12 +47,12 @@ public class DijkstraPQ : IDijkstra
 
             foreach (var edge in _routersGraph[currentVertex])
             {
-                var adjacentVertex = _routersGraph.Keys.Where(v => v.Name == edge.Destination.Name).First();
+                var adjacentVertex = edge.Destination;
                 if (Relax(currentVertex, adjacentVertex, edge.EdgeWeight))
                 {
-                    var vertexLocator = vertexLocators[adjacentVertex];
+                    var vertexLocator = _vertexLocators[adjacentVertex];
                     var newLocator = priorityQueue.Update(vertexLocator, adjacentVertex.Weight);
-                    vertexLocators[adjacentVertex] = newLocator;
+                    _vertexLocators[adjacentVertex] = newLocator;
                 }
             }
         }
@@ -91,8 +91,12 @@ public class DijkstraPQ : IDijkstra
         foreach (var vertex in _routersGraph.Keys)
         {
             vertex.Weight = vertex.Name.Equals(sourceRouter.Name) ? 0 : int.MaxValue;
-            var vartexLocator = q.Add(vertex.Weight, vertex);
-            vertexLocators.Add(vertex, vartexLocator);
+            _ = q.Add(vertex.Weight, vertex);
+        }
+
+        foreach (var item in q)
+        {
+            _vertexLocators.Add(item.Value, item.Locator);
         }
         return q;
     }
