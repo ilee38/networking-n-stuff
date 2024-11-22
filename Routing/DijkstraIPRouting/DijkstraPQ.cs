@@ -11,12 +11,6 @@ public class DijkstraPQ : IDijkstra
 {
     private readonly Dictionary<Vertex, List<Edge>> _routersGraph;
 
-    /// <summary>
-    ///  A dictionary mapping the graph vertices to its location in the priority queue (needed to efficiently perform updates
-    /// to the priority queue elements).
-    /// </summary>
-    private readonly IDictionary<Vertex, int> _vertexLocators = new Dictionary<Vertex, int>();
-
     public DijkstraPQ(Dictionary<Vertex, List<Edge>> routersGraph)
     {
         _routersGraph = routersGraph;
@@ -50,9 +44,7 @@ public class DijkstraPQ : IDijkstra
                 var adjacentVertex = edge.Destination;
                 if (Relax(currentVertex, adjacentVertex, edge.EdgeWeight))
                 {
-                    var vertexLocator = _vertexLocators[adjacentVertex];
-                    var newLocator = priorityQueue.Update(vertexLocator, adjacentVertex.Weight);
-                    _vertexLocators[adjacentVertex] = newLocator;
+                    _ = priorityQueue.Update(adjacentVertex.Locator, adjacentVertex.Weight);
                 }
             }
         }
@@ -94,10 +86,6 @@ public class DijkstraPQ : IDijkstra
             _ = q.Add(vertex.Weight, vertex);
         }
 
-        foreach (var item in q)
-        {
-            _vertexLocators.Add(item.Value, item.Locator);
-        }
         return q;
     }
 }

@@ -24,11 +24,17 @@ public class Vertex
    /// </summary>
    public string NetMask { get; set; }
 
-   public Vertex(string name, int weight=int.MaxValue, Vertex? parent=null, string netMask="")
+   /// <summary>
+   /// The location (index) of the vertex when inside an array or List.
+   /// </summary>
+   public int Locator { get; set; }
+
+   public Vertex(string name, int weight=int.MaxValue, Vertex? parent=null, string netMask="", int locator=-1)
    {
       Name = name;
       Weight = weight;
       Parent = parent;
       NetMask = netMask;
+      Locator = locator;
    }
 }

@@ -14,9 +14,4 @@ public class QueueItem<T>
     /// The actual object's value
     /// </summary>
     public T Value { get; set; }
-
-    /// <summary>
-    /// Represents the location of the item in the collection. I.e. the index in a List.
-    /// </summary>
-    public int Locator { get; set; }
 }

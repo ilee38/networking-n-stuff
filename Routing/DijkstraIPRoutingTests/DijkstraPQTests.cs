@@ -6,8 +6,8 @@ namespace DijkstraIPRoutingTests;
 public class DijkstraPQTests
 {
     private const string RoutersFilePath = "routerinfo.json";
-    private readonly DijkstraPQ _dijkstra = new DijkstraPQ(DijkstraTools.InitializeGraph(RoutersFilePath));
-    
+    private readonly DijkstraPQ _dijkstra = new(DijkstraTools.InitializeGraph(RoutersFilePath));
+
     [Fact]
     public void ShortestPathTests()
     {

@@ -6,7 +6,7 @@ namespace DijkstraIPRoutingTests;
 public class DijkstraTests
 {
     private const string RoutersFilePath = "routerinfo.json";
-    private readonly Dijkstra _dijkstra = new Dijkstra(DijkstraTools.InitializeGraph(RoutersFilePath));
+    private readonly Dijkstra _dijkstra = new(DijkstraTools.InitializeGraph(RoutersFilePath));
 
     [Fact]
     public void DijkstraShortestPathTest()

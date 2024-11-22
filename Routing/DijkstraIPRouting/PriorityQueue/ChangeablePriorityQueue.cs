@@ -27,18 +27,18 @@ public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>, IEnume
     public int Add(int key, Vertex value)
     {
         var index = Queue.Count;
+        value.Locator = index;
         var newElement = new QueueItem<Vertex>
         {
             Key = key,
             Value = value,
-            Locator = index
         };
 
         // Add the element to the end of the list, then sift-up to fix the heap's order
         Queue.Add(newElement);
         SiftUp(index);
 
-        return newElement.Locator;
+        return value.Locator;
     }
 
     /// <inheritdoc/>
@@ -86,8 +86,8 @@ public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>, IEnume
     /// i.e. the key can be updated while the value stays the same if the provided value is the same as the element currently.
     /// </summary>
     /// <param name="locator">The locator of the element to update.</param>
-    /// <param name="key">The new key for the element.</param>
-    /// <param name="value">The new value for the element.</param>
+    /// <param name="key">The new key for the element. This represents the priority in the queue.</param>
+    /// <param name="value">(Optional) The new value for the element.</param>
     /// <returns>The new locator of  the updated element</returns>
     public int Update(int locator, int key, Vertex? value=null)
     {
@@ -97,13 +97,11 @@ public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>, IEnume
         {
             elementToUpdate.Value = value;
         }
-        else
-        {
-            elementToUpdate.Value.Weight = key;
-        }
+
+        elementToUpdate.Value.Weight = key;
 
         Sift(locator);
-        return elementToUpdate.Locator;
+        return elementToUpdate.Value.Locator;
     }
 
     /// <summary>
@@ -164,8 +162,8 @@ public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>, IEnume
             }
             if (lowestChild.Key < Queue[index].Key )
             {
-                SwapElements(index, lowestChild.Locator);
-                SiftDown(lowestChild.Locator);
+                SwapElements(index, lowestChild.Value.Locator);
+                SiftDown(lowestChild.Value.Locator);
             }
         }
     }
@@ -196,8 +194,8 @@ public class ChangeablePriorityQueue : IPriorityQueue<QueueItem<Vertex>>, IEnume
     private void SwapElements(int i, int j)
     {
         (Queue[i], Queue[j]) = (Queue[j], Queue[i]);
-        Queue[i].Locator = i;
-        Queue[j].Locator = j;
+        Queue[i].Value.Locator = i;
+        Queue[j].Value.Locator = j;
     }
 
     private bool HasLeftChild(int index)
