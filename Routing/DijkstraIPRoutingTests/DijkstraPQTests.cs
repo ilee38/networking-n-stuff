@@ -26,4 +26,23 @@ public class DijkstraPQTests
         Assert.True(shortestPath[3].Name == "10.34.98.1");
         Assert.True(shortestPath[4].Name == "10.34.166.1");
     }
+
+    [Fact]
+    public void ShortestPathNoPathTests()
+    {
+        // Arrange
+        var sourceIp1 = new Vertex("10.34.52.187", netMask: "/24");
+        var destinationIp1 = new Vertex("10.34.52.244", netMask: "/24");
+        var sourceIp2 = new Vertex("10.34.79.218", netMask: "/24");
+        var destinationIp2 = new Vertex("10.34.79.58", netMask: "/24");
+
+        // Act
+        var shortestPath1 = _dijkstra.ShortestPath(sourceIp1, destinationIp1);
+        var shortestPath2 = _dijkstra.ShortestPath(sourceIp2, destinationIp2);
+
+        // Assert
+        Assert.True(shortestPath1.Count == 0);
+        Assert.True(shortestPath2.Count == 0);
+    }
+
 }
